@@ -1,0 +1,251 @@
+<!-- Nav tabs -->
+<uib-tabset active="active" style="margin-top: 50px">
+    <uib-tab index="0">
+        <uib-tab-heading>
+            <i class="fa fa-home"></i> MDDP Data Import
+        </uib-tab-heading>
+        <form class="form-validation" ng-submit="home.onSubmit()" style="margin-top: 10px;">
+            <div class="form-group row">
+                <div class="col-sm-3">
+                    <input type="file" ng-model="home.excel" base-sixty-four-input
+                           class="form-control btn btn-default"
+                           required>
+                </div>
+
+                <div class="col-sm-3">
+                    <ui-select ng-model="home.selectedSheet" ng-change="home.showCountries()">
+                        <ui-select-match placeholder="Select Sheet">
+                            <span ng-bind="$select.selected.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="item in (home.sheets | filter: $select.search) track by item.id">
+                            <span ng-bind="item.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="col-sm-2">
+                    <ui-select ng-model="home.selectedCountry" ng-change="home.showPeriods()">
+                        <ui-select-match placeholder="Select Country">
+                            <span ng-bind="$select.selected.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="item in (home.countries | filter: $select.search) track by item.uid">
+                            <span ng-bind="item.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="col-sm-4">
+                    <ui-select ng-model="home.selectedPeriod" ng-change="home.showData()">
+                        <ui-select-match placeholder="Select Period">
+                            <span ng-bind="$select.selected.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="item in (home.periods | filter: $select.search) track by item.uid">
+                            <span ng-bind="item.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+            <uib-tabset active="active" ng-show="home.data.length > 0" class="tabs-right">
+                <uib-tab index="0">
+                    <uib-tab-heading>
+                        <i class="fa fa-home"></i> Data
+                    </uib-tab-heading>
+
+                    <table class="table table-bordered" style="margin-top: 10px;">
+                        <thead>
+                        <tr>
+                            <th>
+                                Organization Unit
+                            </th>
+                            <th>
+                                Data Element
+                            </th>
+                            <th>
+                                Combo
+                            </th>
+                            <th>
+                                Period
+                            </th>
+
+                            <th>
+                                Cell
+                            </th>
+                            <th>
+                                Value
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="data in home.data.slice(((home.currentPage-1)*home.itemsPerPage), ((home.currentPage)*home.itemsPerPage))">
+                            <td>
+                                {{data.orgUnitName}}
+                            </td>
+                            <td>
+                                {{data.dataElementName}}
+                            </td>
+                            <td>
+                                {{data.categoryOptionComboName}}
+                            </td>
+                            <td>
+                                {{data.period}}
+                            </td>
+
+                            <td>
+                                {{data.cell}}
+                            </td>
+                            <td>
+                                {{data.value}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row" ng-show="home.data.length > 0">
+                        <div class="col-sm-9">
+                            <ul uib-pagination total-items="home.totalItems" ng-model="home.currentPage"
+                                max-size="home.maxSize" boundary-link-numbers="true"
+                                items-per-page="home.itemsPerPage"></ul>
+                        </div>
+                        <div class="col-sm-3 text-right">
+                            <button type="submit" class="btn btn-primary submit-button">Submit Data
+                            </button>
+                            &nbsp;&nbsp;
+                            <button type="reset" class="btn btn-success submit-button"
+                                    ng-click="home.reset()">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </uib-tab>
+                <uib-tab index="1">
+                    <uib-tab-heading>
+                        <i class="fa fa-bars"></i> Json Data
+                    </uib-tab-heading>
+                    {{home.dataValueSets|json}}
+                </uib-tab>
+            </uib-tabset>
+        </form>
+    </uib-tab>
+
+    <uib-tab index="1">
+        <uib-tab-heading>
+            <i class="fa fa-bars"></i> MMDP Project Geographic Coverage
+        </uib-tab-heading>
+
+        <form class="form-validation" ng-submit="home.onSubmitTraining()" style="margin-top: 10px;">
+            <div class="form-group row">
+                <div class="col-sm-4">
+                    <input type="file" ng-model="home.training" base-sixty-four-input
+                           class="form-control btn btn-default"
+                           required>
+                </div>
+
+                <div class="col-sm-4">
+                    <ui-select ng-model="home.selectedTrainingSheet" ng-change="home.showTrainingCountries()">
+                        <ui-select-match placeholder="Select Sheet">
+                            <span ng-bind="$select.selected.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="item in (home.trainingSheets | filter: $select.search) track by item.id">
+                            <span ng-bind="item.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="col-sm-4">
+                    <ui-select ng-model="home.selectedTrainingCountry" ng-change="home.showTrainingData()">
+                        <ui-select-match placeholder="Select Country">
+                            <span ng-bind="$select.selected.name"></span>
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="item in (home.trainingCountries | filter: $select.search) track by item.uid">
+                            <span ng-bind="item.name"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+            <uib-tabset active="active" ng-show="home.traingData.length > 0" class="tabs-right">
+                <uib-tab index="0">
+                    <uib-tab-heading>
+                        <i class="fa fa-home"></i> Data
+                    </uib-tab-heading>
+
+                    <table class="table table-bordered" style="margin-top: 10px;">
+                        <thead>
+                        <tr>
+                            <th>
+                                Organization Unit
+                            </th>
+                            <th>
+                                Data Element
+                            </th>
+                            <th>
+                                Combo
+                            </th>
+                            <th>
+                                Period
+                            </th>
+
+                            <th>
+                                Cell
+                            </th>
+                            <th>
+                                Value
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="data in home.traingData.slice(((home.currentPage-1)*home.itemsPerPage), ((home.currentPage)*home.itemsPerPage))">
+                            <td>
+                                {{data.orgUnitName}}
+                            </td>
+                            <td>
+                                {{data.dataElementName}}
+                            </td>
+                            <td>
+                                {{data.categoryOptionComboName}}
+                            </td>
+                            <td>
+                                {{data.period}}
+                            </td>
+
+                            <td>
+                                {{data.cell}}
+                            </td>
+                            <td>
+                                {{data.value}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row" ng-show="home.traingData.length > 0">
+                        <div class="col-sm-9">
+                            <ul uib-pagination total-items="home.totalItems" ng-model="home.currentPage"
+                                max-size="home.maxSize" boundary-link-numbers="true"
+                                items-per-page="home.itemsPerPage"></ul>
+                        </div>
+                        <div class="col-sm-3 text-right">
+                            <button type="submit" class="btn btn-primary submit-button">Submit Data
+                            </button>
+                            &nbsp;&nbsp;
+                            <button type="reset" class="btn btn-success submit-button"
+                                    ng-click="home.reset()">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </uib-tab>
+                <uib-tab index="1">
+                    <uib-tab-heading>
+                        <i class="fa fa-bars"></i> Json Data
+                    </uib-tab-heading>
+                    {{home.trainingDataValueSets|json}}
+                </uib-tab>
+            </uib-tabset>
+        </form>
+
+    </uib-tab>
+</uib-tabset>
